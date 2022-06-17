@@ -72,3 +72,23 @@ def get_signal(tgt1,tgt2,start_date,end_date) :
     df_target = df_target.sort_values('stddate').reset_index(drop=True)
     signal = df_target.iloc[len(df_target)-1]['Signal']
     return df_target, signal
+
+def get_constituents(stddate):
+    sector = {'WMS41': '대형순수성장',
+              'WMS31': '대형순수가치',
+              'WMS44': '중소형순수성장',
+              'WMS34': '중소형순수가치'}
+    df = pd.DataFrame(columns=['지수코드','지수명', '티커', '종목명', '섹터'])
+    for i, sec_code in enumerate(sector.keys()):
+        response = requests.get('https://www.wiseindex.com/Index/GetIndexComponets?ceil_yn=0&dt=' + stddate + '&sec_cd=' + str(sec_code))
+        if (response.status_code == 200):
+            json_list = response.json()
+            for json in json_list['list'] :
+                지수코드 = str(sec_code)
+                지수명 = json['IDX_NM_KOR'][7:]
+                티커 = "A" + json['CMP_CD']
+                종목명 = json['CMP_KOR']
+                섹터 = json['SEC_NM_KOR']
+                df = df.append(
+                    {'지수코드' : 지수코드, '지수명': 지수명, '티커': 티커, '종목명': 종목명, '섹터': 섹터}, ignore_index=True)
+    return df

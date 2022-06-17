@@ -114,9 +114,8 @@ def get_style_size_signal(start_date, end_date) :
                 style_to_size = ''
     return style_to_size
 
-
-end_date = '20220331'
-start_date = '20191230'
+start_date = '20220228'
+end_date = '20220531'
 bdate_m = get_bdate_info(start_date, end_date)
 bdate_m = bdate_m[bdate_m['월말']==1].reset_index(drop=True)
 
@@ -130,4 +129,4 @@ for i in range(0,len(bdate_m)) :
     df = pd.concat([df,df_temp])
     print(end_date, size_style_signal,style_size_signal)
 
-df.to_excel('C:/Users/ysj/Desktop/all.xlsx')
+df.to_excel('C:/Users/Check/Desktop/all.xlsx')
